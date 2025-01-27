@@ -9,4 +9,6 @@ public interface MemberService {
 
 	void changePassword(ChangePasswordDTO changeEntity);
 
+	void deleteByPassword(String password);
+
 }

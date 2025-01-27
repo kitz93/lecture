@@ -42,7 +42,9 @@ public class SecurityConfigure {
 				.authorizeHttpRequests(requests -> {
 					requests.requestMatchers("/members", "/members/login").permitAll(); // 인증없이 이용 가능
 					requests.requestMatchers(HttpMethod.PUT, "/members").authenticated(); // 인증해야 이용 가능
+					requests.requestMatchers(HttpMethod.DELETE, "/members").authenticated();
 					requests.requestMatchers("/admin/**").hasRole("ADMIN"); // admin 계정만 이용 가능
+					requests.requestMatchers(HttpMethod.POST, "/members/refresh").authenticated();
 				})
 				/*
 				 * sessionManagement : 세션 관리에 대한 설정을 지정 sessionCreationPolicy : 세션에 대한 정책을 설정

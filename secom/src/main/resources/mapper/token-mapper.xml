@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.secom.token.model.mapper.TokenMapper">
+
+	<select id="findByToken" resultType="RefreshTokenDTO">
+		SELECT 
+		       USER_NO userNo, 
+		       TOKEN token, 
+		       EXPIRED_AT expiredAt 
+		  FROM 
+		       TB_REFRESH_TOKEN 
+		 WHERE 
+		       TOKEN = #{refreshToken}
+	</select>
+	
+	<delete id="deleteExpiredRefreshToken">
+		DELETE 
+		  FROM 
+		       TB_REFRESH_TOKEN 
+		 WHERE 
+		       USER_NO = #{userNo} 
+		   AND 
+		       EXPIRED_AT &lt; #{currentTime}
+	</delete>
+	
+</mapper>

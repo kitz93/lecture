@@ -50,20 +50,30 @@ public class MemberServiceImpl implements MemberService {
 
 		log.info("가입 성공");
 	}
+	
+	private Long passwordMatches(String password) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails)auth.getPrincipal();
+		if(!passwordEncoder.matches(password, userDetails.getPassword())) {
+			throw new MissmatchPasswordException("비밀번호가 일치하지 않음");
+		}
+		return userDetails.getUserNo();
+	}
 
 	@Override
 	public void changePassword(ChangePasswordDTO changeEntity) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails)auth.getPrincipal();
-		if(!(passwordEncoder.matches(changeEntity.getCurrentPwd(), userDetails.getPassword()))) {
-			throw new MissmatchPasswordException("비밀번호가 일치하지 않음");
-		}
+		Long userNo = passwordMatches(changeEntity.getCurrentPwd());
 		String encodeNewPassword = passwordEncoder.encode(changeEntity.getNewPwd());
 		Map<String, String> changeRequest = new HashMap<String, String>();
-		changeRequest.put("userNo", String.valueOf(userDetails.getUserNo()));
+		changeRequest.put("userNo", String.valueOf(userNo));
 		changeRequest.put("password", encodeNewPassword);
-		
 		memberMapper.changePassword(changeRequest);
+	}
+
+	@Override
+	public void deleteByPassword(String password) {
+		Long userNo = passwordMatches(password);
+		memberMapper.deleteByPassword(userNo);
 	}
 
 }

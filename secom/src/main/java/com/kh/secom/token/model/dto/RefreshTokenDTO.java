@@ -9,8 +9,8 @@ import lombok.Data;
 @Builder
 public class RefreshTokenDTO {
 	
-	private String token;
 	private Long userNo;
+	private String token;
 	private Long expiredAt;
 
 }

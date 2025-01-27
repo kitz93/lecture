@@ -15,7 +15,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     jdbc-type-for-null: NULL
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.kh.secom.member.model.vo
+  type-aliases-package: com.kh.secom.member.model.vo, com.kh.secom.token.model.dto
 
 logging:
   level:
