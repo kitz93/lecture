@@ -40,14 +40,20 @@ public class SecurityConfigure {
 				.csrf(AbstractHttpConfigurer::disable) // csrf(Cross-Site Request Forgery) 사용하지 않음
 				.cors(AbstractHttpConfigurer::disable) // 지금은 사용하지 않고 나중에 nginx 붙이기
 				.authorizeHttpRequests(requests -> {
-					requests.requestMatchers("/members", "/members/login").permitAll(); // 인증없이 이용 가능
+					requests.requestMatchers("/members", "/members/login", "/uploads/**").permitAll(); // 인증없이 이용 가능
 					requests.requestMatchers(HttpMethod.PUT, "/members").authenticated(); // 인증해야 이용 가능
-					requests.requestMatchers(HttpMethod.DELETE, "/members").authenticated();
 					requests.requestMatchers("/admin/**").hasRole("ADMIN"); // admin 계정만 이용 가능
+					requests.requestMatchers(HttpMethod.DELETE, "/members").authenticated();
 					requests.requestMatchers(HttpMethod.POST, "/members/refresh").authenticated();
+					requests.requestMatchers(HttpMethod.POST, "/boards").authenticated();
+					requests.requestMatchers(HttpMethod.GET, "/boards/**", "/comments/**").permitAll();
+					requests.requestMatchers(HttpMethod.PUT, "/boards/**").authenticated();
+					requests.requestMatchers(HttpMethod.DELETE, "/boards/**").authenticated();
+					requests.requestMatchers(HttpMethod.POST, "/comments").authenticated();
 				})
 				/*
-				 * sessionManagement : 세션 관리에 대한 설정을 지정 sessionCreationPolicy : 세션에 대한 정책을 설정
+				 * sessionManagement : 세션 관리에 대한 설정을 지정 
+				 * sessionCreationPolicy : 세션에 대한 정책을 설정
 				 */
 				.sessionManagement(
 						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

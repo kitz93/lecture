@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.kh.secom.auth.model.vo.CustomUserDetails;
@@ -46,6 +47,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		 */
 		Map<String, String> tokens = tokenService.generateToken(user.getUsername(), user.getUserNo());
 		return tokens;
+	}
+	
+	@Override
+	public CustomUserDetails getAuthenticationUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails user = (CustomUserDetails)auth.getPrincipal();
+		return user;
+	}
+	
+	@Override
+	public void validWriter(String writer, String username) {
+		log.info("boardWriter = {} / username = {}", writer, username);
+		if(writer != null && !writer.equals(username)) {
+			throw new RuntimeException("사용자와 게시글 작성자가 다름");
+		}
 	}
 
 }
