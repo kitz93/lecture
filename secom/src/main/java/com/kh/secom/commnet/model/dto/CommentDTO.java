@@ -1,6 +1,6 @@
 package com.kh.secom.commnet.model.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,6 @@ public class CommentDTO {
 	private String commentWriter;
 	@NotBlank(message = "내용이 비었음")
 	private String content;
-	private LocalDate createDate;
+	private LocalDateTime createDate;
 
 }
